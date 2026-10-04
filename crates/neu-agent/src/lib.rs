@@ -30,7 +30,14 @@ pub trait ToolRunner: Send + Sync {
     fn run(&self, name: &str, args: serde_json::Value) -> BoxedToolFuture;
 }
 
-pub const MAX_STEPS: usize = 8;
+/// Step budget for the agent loop. `DEFAULT` suits chat; `EXTENDED` suits
+/// multi-file coding and Creator-mode plugin installation (search → write →
+/// test → reload chains regularly exceed 30 steps). Long-horizon work should
+/// request `EXTENDED` explicitly rather than unbounded loops — the budget is
+/// a runaway guard, surfaced to the user when exhausted.
+pub const DEFAULT_MAX_STEPS: usize = 25;
+pub const EXTENDED_MAX_STEPS: usize = 60;
+pub const MAX_STEPS: usize = DEFAULT_MAX_STEPS;
 
 const SYSTEM_PROMPT: &str = "You are NeuOS, the agent built into the user's system launcher. \
 You have tools that give you full access to this machine. Use them to answer and to act. \
@@ -132,7 +139,9 @@ async fn run_inner(
     }
 
     tx.send(AgentEvent::Done {
-        answer: "Stopped after reaching the step limit.".into(),
+        answer: format!(
+            "Stopped after the step limit ({MAX_STEPS}). Say \"continue\" to resume from where it left off, or ask for the remaining work in smaller pieces."
+        ),
         steps: MAX_STEPS,
     })
     .await
