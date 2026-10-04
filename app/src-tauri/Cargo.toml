@@ -1,0 +1,31 @@
+[package]
+name = "neuos"
+version = "0.1.0"
+description = "NeuOS — a smart search box for your system"
+authors = ["abdullah"]
+edition = "2021"
+
+[lib]
+name = "neuos_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+neu-index = { workspace = true }
+neu-router = { workspace = true }
+neu-provider = { workspace = true }
+neu-agent = { workspace = true }
+neu-tools = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+scraper = "0.20"
+base64 = "0.22"
+notify = "8"
+tauri = { version = "2", features = [] }
+tauri-plugin-global-shortcut = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-single-instance = "2"

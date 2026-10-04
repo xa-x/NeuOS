@@ -1,0 +1,12 @@
+[package]
+name = "neu-index"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+neu-router = { workspace = true }
+serde = { workspace = true }
+ignore = "0.4"
+notify = "8"
+tantivy = "0.22"

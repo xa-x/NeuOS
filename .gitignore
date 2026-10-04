@@ -1,0 +1,11 @@
+# Rust
+/target
+**/*.rs.bk
+
+# Node / frontend
+node_modules/
+dist/
+
+# Local state
+*.log
+.DS_Store
